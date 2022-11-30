@@ -51,6 +51,33 @@ function clickTile(event){
             tile.removeEventListener('click', clickTile)
         })
     }
+    easyComputerPlay()
+}
+
+function easyComputerPlay(){
+    let totalPlays = ['1','2','3','4','5','6','7','8','9']
+    let possiblePlays = totalPlays.filter(n => !playerOne.tiles.includes(n) && !playerTwo.tiles.includes(n))
+    let randomVal = Math.random()
+    console.log(randomVal)
+    let increment = 1 / possiblePlays.length
+    let lowerBound = 0
+    let upperBound = increment
+    possiblePlays.forEach(tile =>{
+        if (randomVal >= lowerBound && randomVal < upperBound){
+            console.log(`play on ${tile}`)
+            let placementTile = document.querySelector(`[tile-number='${tile}']`)
+            placementTile.textContent = 'O'
+            playerTwo.tiles.push(`${tile}`)
+            console.log(possiblePlays)
+            possiblePlays = possiblePlays.filter(item => item !== tile.toString())
+            console.log(possiblePlays)
+            console.log(tile)
+            gameFlow.turn = 'X'
+            checkEnd()
+        }
+        lowerBound += increment
+        upperBound += increment
+    })
 }
 
 function checkEnd(){
@@ -101,6 +128,7 @@ function clickNextTwo(event){
     }
     else{
         document.querySelector('.part-3b').style.display = 'grid'
+        document.querySelector('.submit-button-b').addEventListener('click', clickStartB)
     }
 }
 
@@ -120,6 +148,21 @@ function clickStartA(event){
         const partThree = document.querySelector('.part-3a')
         partThree.appendChild(nameWarning)
     }
+}
+
+function clickStartB(event){
+    event.preventDefault()
+    const levelSelection = document.querySelector('input[name="difficulty"]:checked').value
+    console.log(levelSelection)
+    if (levelSelection == 'easy'){
+        playerTwo.name = 'Easy Computer'
+    }
+    else {
+        playerTwo.name = 'Hard Computer'
+    }
+    document.querySelector('.options').style.display = 'none'
+    document.querySelector('.board').style.display = 'grid'
+    showBoard()
 }
 
 
