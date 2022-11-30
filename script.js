@@ -106,11 +106,20 @@ function clickNextTwo(event){
 
 function clickStartA(event){
     event.preventDefault()
-    const playerTwoName = document.querySelector('.player-two input').value 
-    playerTwo.name = playerTwoName
-    document.querySelector('.board').style.display = 'grid'
-    document.querySelector('.options').style.display = 'none'
-    showBoard()
+    if (document.querySelector('.player-two input').value != ''){
+        const playerTwoName = document.querySelector('.player-two input').value 
+        playerTwo.name = playerTwoName
+        document.querySelector('.options').style.display = 'none'
+        document.querySelector('.board').style.display = 'grid'
+        showBoard()
+    }
+    else{
+        const nameWarning = document.createElement('p')
+        nameWarning.classList.add('name-warning')
+        nameWarning.textContent = 'Please enter your name!'
+        const partThree = document.querySelector('.part-3a')
+        partThree.appendChild(nameWarning)
+    }
 }
 
 
