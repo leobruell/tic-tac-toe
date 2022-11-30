@@ -11,12 +11,11 @@ body{
     justify-items: center;
 }
 .board{
-    display: grid;
+    display: none;
     grid-template-columns: repeat(3, 150px);
     grid-template-rows: repeat(3, 150px);
     background-color: black;
     gap: 4px;
-
 }
 
 .board div{
@@ -27,4 +26,20 @@ body{
     justify-content: center;
     background-color: white;
     font-size: 100px;
+}
+
+.part-2, .part-3a, .part-3b{
+    display: none;
+}
+
+.form-div{
+    border-style: solid;
+    border-color: black;
+    width: 400px;
+    height: 400px;
+}
+
+.name-warning{
+    color: red;
+    font-size: .9rem;
 }
