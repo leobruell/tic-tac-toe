@@ -51,27 +51,63 @@ function clickTile(event){
             tile.removeEventListener('click', clickTile)
         })
     }
-    easyComputerPlay()
+    if (playerTwo.name == 'Easy Computer') {
+        easyComputerPlay()
+    }
+    else if (playerTwo.name == 'Hard Computer'){
+        hardComputerPlay()
+    }
+}
+
+function hardComputerPlay(){
+    let possiblePlays
+    if (playerTwo.tiles.length == 0){
+        possiblePlays = ['1', '3','7','9']
+        possiblePlays = possiblePlays.filter(n => !playerOne.tiles.includes(n))
+        console.log(possiblePlays)
+        playRandom(possiblePlays)
+    }
+    else{
+        const winningCombos = [['1','2','3'], ['4','5','6'], ['7','8','9'], ['1','4','7'], ['2','5','8'], ['3','6','9'],['1','5','9'],['3','5','7']]
+        winningCombos.forEach(combo =>{
+            let playerOneCount = 0
+            combo.forEach(val =>{
+                if (playerOne.tiles.includes(val)){
+                    playerOneCount++
+                }
+            })
+            if (playerOneCount == 2){
+                let computerPlacement = combo.filter(n => !playerOne.tiles.includes(n))
+                console.log(computerPlacement)
+
+                let placementTile = document.querySelector(`[tile-number='${computerPlacement}']`)
+                placementTile.textContent = 'O'
+                playerTwo.tiles.push(`${computerPlacement}`)
+                // possiblePlays = possiblePlays.filter(item => item !== tile.toString())
+                gameFlow.turn = 'X'
+                checkEnd()
+            }
+        })
+    }
 }
 
 function easyComputerPlay(){
     let totalPlays = ['1','2','3','4','5','6','7','8','9']
     let possiblePlays = totalPlays.filter(n => !playerOne.tiles.includes(n) && !playerTwo.tiles.includes(n))
+    playRandom(possiblePlays)
+}
+
+function playRandom(possiblePlays){
     let randomVal = Math.random()
-    console.log(randomVal)
     let increment = 1 / possiblePlays.length
     let lowerBound = 0
     let upperBound = increment
     possiblePlays.forEach(tile =>{
         if (randomVal >= lowerBound && randomVal < upperBound){
-            console.log(`play on ${tile}`)
             let placementTile = document.querySelector(`[tile-number='${tile}']`)
             placementTile.textContent = 'O'
             playerTwo.tiles.push(`${tile}`)
-            console.log(possiblePlays)
             possiblePlays = possiblePlays.filter(item => item !== tile.toString())
-            console.log(possiblePlays)
-            console.log(tile)
             gameFlow.turn = 'X'
             checkEnd()
         }
