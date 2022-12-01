@@ -51,64 +51,90 @@ function clickTile(event){
             tile.removeEventListener('click', clickTile)
         })
     }
-    if (playerTwo.name == 'Easy Computer') {
+    if (playerTwo.name == 'Easy Computer' && !document.querySelector('.end-message').textContent.includes('win')) {
         easyComputerPlay()
         checkEnd()
     }
-    else if (playerTwo.name == 'Hard Computer'){
+    else if (playerTwo.name == 'Hard Computer' && !document.querySelector('.end-message').textContent.includes('win')){
         hardComputerPlay()
+        checkEnd()
+    }
+    else if (playerTwo.name == 'Impossible Computer' && !document.querySelector('.end-message').textContent.includes('win')){
+        impossibleComputerPlay()
         checkEnd()
     }
 }
 
 function hardComputerPlay(){
-    let possiblePlays
     if (playerTwo.tiles.length == 0 && !playerOne.tiles.includes('5')){
-        console.log('a')
-        let firstPlacement = document.querySelector(`[tile-number='5']`)
-        firstPlacement.textContent = 'O'
+        let computerPlacement = document.querySelector(`[tile-number='5']`)
+        computerPlacement.textContent = 'O'
         playerTwo.tiles.push('5')
         gameFlow.turn = 'X'
+        return
     }
-    else if (playerTwo.tiles.length == 0){
-        console.log('b')
-        possiblePlays = ['1', '3','7','9']
-        possiblePlays = possiblePlays.filter(n => !playerOne.tiles.includes(n))
-        playRandom(possiblePlays)
-    }
-    
-    else{
-        console.log('c')
-        const winningCombos = [['1','2','3'], ['4','5','6'], ['7','8','9'], ['1','4','7'], ['2','5','8'], ['3','6','9'],['1','5','9'],['3','5','7']]
-        winningCombos.forEach(combo =>{
-            let playerOneCount = 0
-            let playerTwoCount = 0
-            combo.forEach(val =>{
-                if (playerOne.tiles.includes(val)){
-                    playerOneCount++
-                }
-                if (playerTwo.tiles.includes(val)){
-                    playerTwoCount++
-                }
-            })
-            if (playerOneCount == 2 && playerTwoCount == 0){
-                let computerPlacement = combo.filter(n => !playerOne.tiles.includes(n))
-                console.log(computerPlacement)
-                let placementTile = document.querySelector(`[tile-number='${computerPlacement}']`)
-                placementTile.textContent = 'O'
-                playerTwo.tiles.push(`${computerPlacement}`)
-                gameFlow.turn = 'X'
-                  
+    impossibleComputerPlay()
+}
+
+
+function impossibleComputerPlay(){
+    let possiblePlays
+    let computerPlacement
+    let placementTile
+    const winningCombos = [['1','2','3'], ['4','5','6'], ['7','8','9'], ['1','4','7'], ['2','5','8'], ['3','6','9'],['1','5','9'],['3','5','7']]
+    for (let i in winningCombos){
+        let playerOneCount = 0
+        let playerTwoCount = 0
+        winningCombos[i].forEach(val =>{
+            if (playerOne.tiles.includes(val)){
+                playerOneCount++
+            }
+            if (playerTwo.tiles.includes(val)){
+                playerTwoCount++
             }
         })
+        if (playerTwoCount == 2 && playerOneCount == 0){
+            computerPlacement = winningCombos[i].filter(n => !playerTwo.tiles.includes(n))
+            placementTile = document.querySelector(`[tile-number='${computerPlacement}']`)
+            placementTile.textContent = 'O'
+            playerTwo.tiles.push(`${computerPlacement}`)
+            gameFlow.turn = 'X'
+            return
+        }
     }
-    console.log(playerOne.tiles)
-    console.log(playerTwo.tiles)
+    for (let i in winningCombos){
+        let playerOneCount = 0
+        let playerTwoCount = 0
+        winningCombos[i].forEach(val =>{
+            if (playerOne.tiles.includes(val)){
+                playerOneCount++
+            }
+            if (playerTwo.tiles.includes(val)){
+                playerTwoCount++
+            }
+        })
+        if (playerOneCount == 2 && playerTwoCount == 0){
+            computerPlacement = winningCombos[i].filter(n => !playerOne.tiles.includes(n))
+            placementTile = document.querySelector(`[tile-number='${computerPlacement}']`)
+            placementTile.textContent = 'O'
+            playerTwo.tiles.push(`${computerPlacement}`)
+            gameFlow.turn = 'X'
+            return
+        }
+    }
+    
     if (playerTwo.tiles.length < playerOne.tiles.length){
         possiblePlays = ['1', '3','7','9']
         possiblePlays = possiblePlays.filter(n => !playerOne.tiles.includes(n) && !playerTwo.tiles.includes(n))
-        console.log(possiblePlays)
-        playRandom(possiblePlays)
+        if (possiblePlays.length == 1 && !playerOne.tiles.includes('5') && !playerTwo.tiles.includes('5')){
+            computerPlacement = document.querySelector(`[tile-number='5']`)
+            computerPlacement.textContent = 'O'
+            playerTwo.tiles.push('5')
+            gameFlow.turn = 'X'
+        }
+        else{
+            playRandom(possiblePlays)
+        }
     }
 }
 
@@ -152,7 +178,7 @@ function checkEnd(){
             endMessage.textContent = `${playerTwo.name} wins!`
         }
     })
-    if (playerOne.tiles.length == 5 && document.querySelector('.end-message').textContent == null){
+    if (playerOne.tiles.length == 5 && !document.querySelector('.end-message').textContent.includes('win')){
         endMessage.textContent = 'You tied!'
     }
 }
@@ -213,8 +239,11 @@ function clickStartB(event){
     if (levelSelection == 'easy'){
         playerTwo.name = 'Easy Computer'
     }
-    else {
+    else if (levelSelection == 'hard'){
         playerTwo.name = 'Hard Computer'
+    }
+    else{
+        playerTwo.name = 'Impossible Computer'
     }
     document.querySelector('.options').style.display = 'none'
     document.querySelector('.board').style.display = 'grid'
