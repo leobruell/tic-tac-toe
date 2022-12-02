@@ -293,11 +293,8 @@ function clickNextOne(event){
         document.querySelector('.next-2').addEventListener('click', clickNextTwo)
     }
     else{
-        const nameWarning = document.createElement('p')
-        nameWarning.classList.add('name-warning')
-        nameWarning.textContent = 'Please enter your name!'
-        const partOne = document.querySelector('.part-1')
-        partOne.appendChild(nameWarning)
+        const nameWarning = document.querySelector('.name-warning-1')
+        nameWarning.style.display = 'flex'
     }
 }
 
@@ -306,11 +303,11 @@ function clickNextTwo(event){
     const opponentChoice = document.querySelector('input[name="question-2"]:checked').value
     document.querySelector('.part-2').style.display = 'none'
     if (opponentChoice == 'friend'){
-        document.querySelector('.part-3a').style.display = 'grid'
+        document.querySelector('.part-3a').style.display = 'flex'
         document.querySelector('.submit-button').addEventListener('click', clickStartA)
     }
     else{
-        document.querySelector('.part-3b').style.display = 'grid'
+        document.querySelector('.part-3b').style.display = 'flex'
         document.querySelector('.submit-button-b').addEventListener('click', clickStartB)
     }
 }
@@ -325,11 +322,8 @@ function clickStartA(event){
         showBoard()
     }
     else{
-        const nameWarning = document.createElement('p')
-        nameWarning.classList.add('name-warning')
-        nameWarning.textContent = 'Please enter your name!'
-        const partThree = document.querySelector('.part-3a')
-        partThree.appendChild(nameWarning)
+        const nameWarning = document.querySelector('.name-warning-2')
+        nameWarning.style.display = 'flex'
     }
 }
 
