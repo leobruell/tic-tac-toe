@@ -66,6 +66,50 @@ function clickTile(event){
 }
 
 function hardComputerPlay(){
+    let possiblePlays
+    let computerPlacement
+    let placementTile
+    const winningCombos = [['1','2','3'], ['4','5','6'], ['7','8','9'], ['1','4','7'], ['2','5','8'], ['3','6','9'],['1','5','9'],['3','5','7']]
+    for (let i in winningCombos){
+        let playerOneCount = 0
+        let playerTwoCount = 0
+        winningCombos[i].forEach(val =>{
+            if (playerOne.tiles.includes(val)){
+                playerOneCount++
+            }
+            if (playerTwo.tiles.includes(val)){
+                playerTwoCount++
+            }
+        })
+        if (playerTwoCount == 2 && playerOneCount == 0){
+            computerPlacement = winningCombos[i].filter(n => !playerTwo.tiles.includes(n))
+            placementTile = document.querySelector(`[tile-number='${computerPlacement}']`)
+            placementTile.textContent = 'O'
+            playerTwo.tiles.push(`${computerPlacement}`)
+            gameFlow.turn = 'X'
+            return
+        }
+    }
+    for (let i in winningCombos){
+        let playerOneCount = 0
+        let playerTwoCount = 0
+        winningCombos[i].forEach(val =>{
+            if (playerOne.tiles.includes(val)){
+                playerOneCount++
+            }
+            if (playerTwo.tiles.includes(val)){
+                playerTwoCount++
+            }
+        })
+        if (playerOneCount == 2 && playerTwoCount == 0){
+            computerPlacement = winningCombos[i].filter(n => !playerOne.tiles.includes(n))
+            placementTile = document.querySelector(`[tile-number='${computerPlacement}']`)
+            placementTile.textContent = 'O'
+            playerTwo.tiles.push(`${computerPlacement}`)
+            gameFlow.turn = 'X'
+            return
+        }
+    }
     if (playerTwo.tiles.length == 0 && !playerOne.tiles.includes('5')){
         let computerPlacement = document.querySelector(`[tile-number='5']`)
         computerPlacement.textContent = 'O'
@@ -73,7 +117,12 @@ function hardComputerPlay(){
         gameFlow.turn = 'X'
         return
     }
-    impossibleComputerPlay()
+    else{
+        possiblePlays = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+        possiblePlays = possiblePlays.filter(n => !playerOne.tiles.includes(n) && !playerTwo.tiles.includes(n))
+        playRandom(possiblePlays)
+        return
+    }
 }
 
 
@@ -122,18 +171,50 @@ function impossibleComputerPlay(){
             return
         }
     }
-    
-    if (playerTwo.tiles.length < playerOne.tiles.length){
+    if (playerTwo.tiles.length == 0 && !playerOne.tiles.includes('5')){
+        let computerPlacement = document.querySelector(`[tile-number='5']`)
+        computerPlacement.textContent = 'O'
+        playerTwo.tiles.push('5')
+        gameFlow.turn = 'X'
+        return
+    }
+    else if (((playerOne.tiles.includes('3') && playerOne.tiles.includes('7')) || (playerOne.tiles.includes('1') && playerOne.tiles.includes('9'))) && playerOne.tiles.length == 2){
+        possiblePlays = ['2','4','6','8']
+        playRandom(possiblePlays)
+        return
+    }
+    else if (playerOne.tiles.includes('2') && playerOne.tiles.includes('6') && playerOne.tiles.length == 2){
+        possiblePlays = ['3']
+        playRandom(possiblePlays)
+        return
+    }
+    else if (playerOne.tiles.includes('6') && playerOne.tiles.includes('8') && playerOne.tiles.length == 2){
+        possiblePlays = ['9']
+        playRandom(possiblePlays)
+        return
+    }
+    else if (playerOne.tiles.includes('8') && playerOne.tiles.includes('4') && playerOne.tiles.length == 2){
+        possiblePlays = ['7']
+        playRandom(possiblePlays)
+        return
+    }
+    else if (playerOne.tiles.includes('2') && playerOne.tiles.includes('4') && playerOne.tiles.length == 2){
+        possiblePlays = ['1']
+        playRandom(possiblePlays)
+        return
+    }
+    else{
         possiblePlays = ['1', '3','7','9']
         possiblePlays = possiblePlays.filter(n => !playerOne.tiles.includes(n) && !playerTwo.tiles.includes(n))
-        if (possiblePlays.length == 1 && !playerOne.tiles.includes('5') && !playerTwo.tiles.includes('5')){
-            computerPlacement = document.querySelector(`[tile-number='5']`)
-            computerPlacement.textContent = 'O'
-            playerTwo.tiles.push('5')
-            gameFlow.turn = 'X'
+        if (possiblePlays.length > 0){
+            playRandom(possiblePlays)
+            return
         }
         else{
+            possiblePlays = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+            possiblePlays = possiblePlays.filter(n => !playerOne.tiles.includes(n) && !playerTwo.tiles.includes(n))
             playRandom(possiblePlays)
+            return
         }
     }
 }
@@ -250,10 +331,16 @@ function clickStartB(event){
     showBoard()
 }
 
+function clickRestart(event){
+    location.reload()
+}
+
 
 //Starting Set-up:
 const playerOne = createPlayer()
 const playerTwo = createPlayer()
 const nextOneButton = document.querySelector('.next-1')
 nextOneButton.addEventListener('click', clickNextOne)
+const restartButton = document.querySelector('.restart')
+restartButton.addEventListener('click', clickRestart)
 
