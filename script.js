@@ -204,13 +204,32 @@ function impossibleComputerPlay(){
         return
     }
     else{
-        possiblePlays = ['1', '3','7','9']
+        if (playerOne.tiles.includes('2')){
+            possiblePlays = ['1','3']
+            }
+        else if (playerOne.tiles.includes('4')){
+            possiblePlays = ['1','7']
+        }
+        else if (playerOne.tiles.includes('6')){
+            possiblePlays = ['3','9']
+        }
+        else if (playerOne.tiles.includes('8')){
+            possiblePlays = ['7','9']
+        }   
+        }
         possiblePlays = possiblePlays.filter(n => !playerOne.tiles.includes(n) && !playerTwo.tiles.includes(n))
         if (possiblePlays.length > 0){
             playRandom(possiblePlays)
             return
         }
         else{
+            possiblePlays = ['1', '3','7','9']
+            possiblePlays = possiblePlays.filter(n => !playerOne.tiles.includes(n) && !playerTwo.tiles.includes(n))
+            if (possiblePlays.length > 0){
+                playRandom(possiblePlays)
+                return
+            }
+            else{
             possiblePlays = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
             possiblePlays = possiblePlays.filter(n => !playerOne.tiles.includes(n) && !playerTwo.tiles.includes(n))
             playRandom(possiblePlays)
